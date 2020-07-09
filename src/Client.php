@@ -63,7 +63,10 @@ class Client
             ]);
             return self::responseJson($response);
         }catch(RequestException $exception){
-            throw new \Exception($exception->getMessage());
+            $response = $exception->getResponse();
+            $response = self::responseJson($response);
+            $exceptionMessage = $response->respuesta ?? $exception->getMessage();
+            throw new \Exception($exceptionMessage);
         }
     }
 
@@ -82,7 +85,10 @@ class Client
             ]);
             return self::responseJson($response);
         }catch(RequestException $exception){
-            throw new \Exception($exception->getMessage());
+            $response = $exception->getResponse();
+            $response = self::responseJson($response);
+            $exceptionMessage = $response->respuesta ?? $exception->getMessage();
+            throw new \Exception($exceptionMessage);
         }
     }
 
