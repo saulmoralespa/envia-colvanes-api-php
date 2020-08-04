@@ -29,7 +29,7 @@ class Client
 
     public function sandboxMode($status = false)
     {
-        self::$_sandbox = true;
+        self::$_sandbox = $status;
     }
 
     protected static function getUrlLiquidation()
@@ -64,7 +64,8 @@ class Client
             return self::responseJson($response);
         }catch(RequestException $exception){
             $response = $exception->getResponse();
-            $response = self::responseJson($response);
+            if (isset($response))
+                $response = self::responseJson($response);
             $exceptionMessage = $response->respuesta ?? $exception->getMessage();
             throw new \Exception($exceptionMessage);
         }
@@ -86,7 +87,8 @@ class Client
             return self::responseJson($response);
         }catch(RequestException $exception){
             $response = $exception->getResponse();
-            $response = self::responseJson($response);
+            if (isset($response))
+                $response = self::responseJson($response);
             $exceptionMessage = $response->respuesta ?? $exception->getMessage();
             throw new \Exception($exceptionMessage);
         }

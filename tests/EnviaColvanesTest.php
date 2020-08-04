@@ -24,35 +24,20 @@ class EnviaColvanesTest extends TestCase
     public function testLiquidation()
     {
         $params = array (
-            'ciudad_origen' => '1',
-            'ciudad_destino' => '1',
+            'ciudad_origen' => '05001',
+            'ciudad_destino' => '73030',
             'cod_formapago' => 6,
             'cod_servicio' => 3,
             'info_cubicacion' =>
                 array (
                     array (
                         'cantidad' => 1,
-                        'largo' => 10.0,
-                        'ancho' => 10.0,
-                        'alto' => 10.0,
+                        'largo' => 4.0,
+                        'ancho' => 4.0,
+                        'alto' => 4.0,
                         'peso' => 10,
                         'declarado' => 10000,
-                    ),
-                    array (
-                        'cantidad' => 1,
-                        'largo' => 20.0,
-                        'ancho' => 20.0,
-                        'alto' => 20.0,
-                        'peso' => 20,
-                        'declarado' => 20000,
                     )
-                ),
-            'mca_docinternacional' => 0,
-            'con_cartaporte' => '0',
-            'info_contenido' =>
-                array (
-                    'num_documentos' => '12345-67890',
-                    'valorproducto' => '10000',
                 ),
         );
         $response = $this->enviaColvanes->liquidation($params);
