@@ -15,6 +15,9 @@ class Client
     const SANDBOX_URL_GUIDES = 'http://200.69.100.66/ServicioLiquidacionRESTpruebas/Service1.svc/Generacion/';
     const URL_GUIDES = 'http://200.69.100.66/ServicioLiquidacionREST/Service1.svc/Generacion/';
 
+    const SANDBOX_URL_GET_GUIDES = 'http://200.69.100.66/ServicioRESTConsultaEstadospruebas/Service1Consulta.svc/ConsultaGuia/';
+    const URL_GET_GUIDES = 'http://200.69.100.66/ServicioRESTConsultaEstados/Service1Consulta.svc/ConsultaGuia/';
+
     private $user;
     private $password;
     private $codeAccount;
@@ -46,6 +49,13 @@ class Client
         return self::URL_GUIDES;
     }
 
+    public static function getUrlConsultGuides()
+    {
+        if(self::$_sandbox)
+            return self::SANDBOX_URL_GET_GUIDES;
+        return self::URL_GET_GUIDES;
+    }
+
     public function client()
     {
         return new GuzzleClient();
@@ -54,6 +64,9 @@ class Client
     public function liquidation(array $params)
     {
         try{
+            $params = array_merge($params,  [
+                'cod_cuenta' => $this->codeAccount,
+            ]);
             $response = $this->client()->post(self::getUrlLiquidation(), [
                 "headers" => [
                     "Authorization" => ["Basic " . $this->encodeCredentials()],
@@ -84,6 +97,20 @@ class Client
                 ],
                 "json" => $params
             ]);
+            return self::responseJson($response);
+        }catch(RequestException $exception){
+            $response = $exception->getResponse();
+            if (isset($response))
+                $response = self::responseJson($response);
+            $exceptionMessage = $response->respuesta ?? $exception->getMessage();
+            throw new \Exception($exceptionMessage);
+        }
+    }
+
+    public function getGuide($guide)
+    {
+        try{
+            $response = $this->client()->request('GET', self::getUrlConsultGuides() . $guide);
             return self::responseJson($response);
         }catch(RequestException $exception){
             $response = $exception->getResponse();

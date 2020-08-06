@@ -17,30 +17,31 @@ class EnviaColvanesTest extends TestCase
         $codAccount = $_ENV['CODCUENTAENVIA'];
 
         $this->enviaColvanes = new Client($user, $password, $codAccount);
-        $this->enviaColvanes->sandboxMode(true);
+        $this->enviaColvanes->sandboxMode(false);
 
     }
 
     public function testLiquidation()
     {
         $params = array (
-            'ciudad_origen' => '05001',
-            'ciudad_destino' => '73030',
-            'cod_formapago' => 6,
-            'cod_servicio' => 3,
+            'ciudad_origen' => '11001',
+            'ciudad_destino' => '13001',
+            'cod_formapago' => 4,
+            'cod_servicio' => 12,
             'info_cubicacion' =>
                 array (
                     array (
                         'cantidad' => 1,
-                        'largo' => 4.0,
-                        'ancho' => 4.0,
-                        'alto' => 4.0,
-                        'peso' => 10,
-                        'declarado' => 10000,
+                        'largo' => 22,
+                        'ancho' => 4,
+                        'alto' => 4,
+                        'peso' => 1,
+                        'declarado' => 15900,
                     )
                 ),
         );
         $response = $this->enviaColvanes->liquidation($params);
+        var_dump($response);
         $this->assertAttributeEmpty('respuesta', $response);
     }
 
@@ -49,12 +50,27 @@ class EnviaColvanesTest extends TestCase
         $params = array (
             'ciudad_origen' => '1',
             'ciudad_destino' => '1',
-            'cod_formapago' => 6,
+            'cod_formapago' => 4,
             'cod_servicio' => 3,
-            'num_unidades' => 1,
-            'mpesoreal_k' => 10,
-            'mpesovolumen_k' => 15,
-            'valor_declarado' => 10000,
+            'info_cubicacion' =>
+                array (
+                    array (
+                        'cantidad' => 1,
+                        'largo' => 10.0,
+                        'ancho' => 10.0,
+                        'alto' => 10.0,
+                        'peso' => 10,
+                        'declarado' => 10000,
+                    ),
+                    array (
+                        'cantidad' => 1,
+                        'largo' => 20.0,
+                        'ancho' => 20.0,
+                        'alto' => 20.0,
+                        'peso' => 20,
+                        'declarado' => 20000,
+                    )
+                ),
             'mca_nosabado' => 0,
             'mca_docinternacional' => 0,
             'cod_regional_cta' => 1,
@@ -62,10 +78,10 @@ class EnviaColvanesTest extends TestCase
             'con_cartaporte' => '0',
             'info_origen' =>
                 array (
-                    'nom_remitente' => 'JORGE GOMEZ',
-                    'dir_remitente' => 'CALLE 13 84 60',
-                    'tel_remitente' => '2020202',
-                    'ced_remitente' => '79123456',
+                    "nom_remitente" => "JORGE GOMEZ",
+                    "dir_remitente" =>  "CALLE 13 84 60",
+                    "tel_remitente" =>  "2020202",
+                    "ced_remitente" => "79123456"
                 ),
             'info_destino' =>
                 array (
@@ -78,10 +94,17 @@ class EnviaColvanesTest extends TestCase
                     'dice_contener' => 'zapatos',
                     'num_documentos' => '12345-67890',
                 ),
-            'numero_guia' => ''
         );
         $response = $this->enviaColvanes->generateGuide($params);
+        var_dump($response);
         $this->assertAttributeEmpty('respuesta', $response);
         $this->assertAttributeNotEmpty('urlguia', $response);
+    }
+
+    public function testGetGuide()
+    {
+        $guide = '014994718990"';
+        $response = $this->enviaColvanes->getGuide($guide);
+        var_dump($response);
     }
 }
