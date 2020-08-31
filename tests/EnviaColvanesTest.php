@@ -17,28 +17,29 @@ class EnviaColvanesTest extends TestCase
         $codAccount = $_ENV['CODCUENTAENVIA'];
 
         $this->enviaColvanes = new Client($user, $password, $codAccount);
-        $this->enviaColvanes->sandboxMode(false);
+        $this->enviaColvanes->sandboxMode(true);
 
     }
 
     public function testLiquidation()
     {
+
+        $cart_prods = [];
+        $cart_prods[] = array(
+            'cantidad' => 1,
+            'largo' => 10.0,
+            'ancho' => 10.0,
+            'alto' => 10.0,
+            'peso' => 10,
+            'declarado' => 10000
+        );
+
         $params = array (
-            'ciudad_origen' => '11001',
-            'ciudad_destino' => '13001',
+            'ciudad_origen' => '05001',
+            'ciudad_destino' => '11001',
             'cod_formapago' => 4,
             'cod_servicio' => 12,
-            'info_cubicacion' =>
-                array (
-                    array (
-                        'cantidad' => 1,
-                        'largo' => 22,
-                        'ancho' => 4,
-                        'alto' => 4,
-                        'peso' => 1,
-                        'declarado' => 15900,
-                    )
-                ),
+            'info_cubicacion' => $cart_prods
         );
         $response = $this->enviaColvanes->liquidation($params);
         var_dump($response);
@@ -47,30 +48,32 @@ class EnviaColvanesTest extends TestCase
 
     public function testGenerateGuide()
     {
+
+        $cart_prods = [];
+        $cart_prods[] = array(
+            'cantidad' => 1,
+            'largo' => 10.0,
+            'ancho' => 10.0,
+            'alto' => 10.0,
+            'peso' => 10,
+            'declarado' => 10000
+        );
+
+        $cart_prods[] = array (
+            'cantidad' => 1,
+            'largo' => 20.0,
+            'ancho' => 20.0,
+            'alto' => 20.0,
+            'peso' => 20,
+            'declarado' => 20000
+        );
+
         $params = array (
             'ciudad_origen' => '1',
             'ciudad_destino' => '1',
             'cod_formapago' => 4,
             'cod_servicio' => 3,
-            'info_cubicacion' =>
-                array (
-                    array (
-                        'cantidad' => 1,
-                        'largo' => 10.0,
-                        'ancho' => 10.0,
-                        'alto' => 10.0,
-                        'peso' => 10,
-                        'declarado' => 10000,
-                    ),
-                    array (
-                        'cantidad' => 1,
-                        'largo' => 20.0,
-                        'ancho' => 20.0,
-                        'alto' => 20.0,
-                        'peso' => 20,
-                        'declarado' => 20000,
-                    )
-                ),
+            'info_cubicacion' => $cart_prods,
             'mca_nosabado' => 0,
             'mca_docinternacional' => 0,
             'cod_regional_cta' => 1,
@@ -103,7 +106,7 @@ class EnviaColvanesTest extends TestCase
 
     public function testGetGuide()
     {
-        $guide = '014994718990"';
+        $guide = '016000727591';
         $response = $this->enviaColvanes->getGuide($guide);
         var_dump($response);
     }
